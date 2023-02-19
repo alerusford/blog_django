@@ -1,0 +1,96 @@
+{% load static %}
+
+<html >
+<head>
+	<title>Мини блог</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<!--	<link rel="shortcut icon" href="css/images/favicon.ico" />-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+</head>
+
+<body>
+<br>
+<div class="shell">
+	<div class="border">
+		<div id="navigation">
+			<ul>
+			    <li><a href="/" class="active">Главная</a></li>
+			    <li><a href="/admin">Админ панель</a></li>
+			</ul>
+		</div>
+
+		<div id="main">
+			<div id="content" class="left">
+
+				<div class="projects">
+					<h3>{{ post.title }}</h3>
+                    <p align="center"><img src="{{ post.img.url }}" width="50%" /></p>
+
+					<div class="item">
+						<div class="">
+							<p> {{ post.description }}</p>
+							<p>Автор:  {{ post.author }}</p>
+						</div>
+						<div class="cl"></div>
+					</div>
+
+				</div>
+			</div>
+
+			<div>
+				<p>Likes: {{ post.likes_set.all.count }}</p>
+				<br>
+				<a href="{% url 'add_likes' post.id %}">Нравится</a>
+				<a href="{% url 'del_likes' post.id %}">Не нравится</a>
+			</div>
+
+		</div>
+
+
+
+		<div class="ui form" style="margin: 10px">
+			<h3>Оставить комментарий</h3>
+			<div>
+				<form action="{% url 'add_comments' post.id %}" method="post">
+					{% csrf_token %}
+					<div>
+						<label>Ваш комментарий</label>
+						<textarea name="text_comments"></textarea>
+					</div>
+					<div>
+						<label>Ваше имя *</label>
+						<input type="text" name="name">
+					</div>
+					<div>
+						<label>Ваш e-mail *</label>
+						<input type="email" name="email">
+					</div>
+					<div>
+						<br>
+						<input class="ui blue submit button" type="submit">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="ui comments" style="margin:10px;">
+			{% for comment in post.comments_set.all %}
+			<div class="ui form field">
+				<h4 class="comment">{{ comment.name }}</h4>
+				<p>
+					{{ comment.text_comments }}
+				</p>
+			</div>
+
+			{% endfor %}
+		</div>
+
+	</div>
+
+	<div id="footer">
+		<p class="copy right">Copyright &copy;  2023 </p>
+	</div>
+</div>
+</body>
+</html>
